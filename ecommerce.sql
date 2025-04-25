@@ -1,94 +1,106 @@
-----PROduct URL Table ---
+----PROduct URL Table ---4
 USE ecommerce_library;
 CREATE TABLE product_image (
-product_url varchar(100) PRIMARY KEY
-)
+    image_id INT PRIMARY KEY AUTO_INCREMENT,
+    product_id INT,
+    product_url varchar(255),
+    FOREIGN KEY (product_id) REFERENCES product_details (product_id)
+);
 
----COLOR OPTIONS----
+---COLOR OPTIONS----5
 USE ecommerce_library;
 CREATE TABLE color_options(
-    Colors varchar(100) PRIMARY KEY
-)
+    color_id INT PRIMARY KEY AUTO_INCREMENT,
+    Color_name VARCHAR(100)
+);
 
----Product Category----
+---Product Category----2
 USE ecommerce_library;
 CREATE TABLE product_category(
-    Product ID VARCHAR(100) PRIMARY KEY,
-    Category VARCHAR(100)
-)
+    category_id INT PRIMARY KEY AUTO_INCREMENT,
+    category_name VARCHAR(100)
+);
 
------Product Details-----
+-----Product Details-----3
 USE ecommerce_library;
 CREATE TABLE product_details(
-    product_Name varchar(100) PRIMARY KEY,
-    base_price VARCHAR(100),
-    FOREIGN KEY (Product_ID) REFERENCES product_category(Product_ID),
-    FOREIGN KEY (brand_name) REFERENCES brand_details (brand_name)
-)
+    product_id INT PRIMARY KEY AUTO_INCREMENT,
+    product_name VARCHAR(100) NOT NULL,
+    base_price decimal(10,2),
+    brand_id INT,
+    category_id INT,
+    FOREIGN KEY (brand_id) REFERENCES brand_details (brand_id),
+    FOREIGN KEY (category_id) REFERENCES product_category (category_id)
+);
 
-------Product Item----
+------Product Item----6
 USE ecommerce_library;
 CREATE TABLE product_items(
-    FOREIGN KEY (Product_ID) REFERENCES product_category (Product_ID),
-    FOREIGN KEY (product_Name) REFERENCES product_details (product_Name)
-)
+    item_id INT PRIMARY KEY AUTO_INCREMENT,
+    product_id INT,
+    product_name varchar(100),
+    FOREIGN KEY (product_id) REFERENCES product_details (product_id)
+);
 
-----Brand----
+----Brand----1
 USE ecommerce_library;
 CREATE TABLE brand_details(
-   brand_ID VARCHAR(100) PRIMARY KEY NOT NULL,
-   brand_name VARCHAR(100),
+   brand_id INT PRIMARY KEY AUTO_INCREMENT,
+   brand_name VARCHAR(100) NOT NULL,
    brand_status VARCHAR(100),
    brand_supplier VARCHAR(100)
-)
-----Product Variation---
+);
+----Product Variation---7
 USE ecommerce_library;
 CREATE TABLE product_variation(
-    product_color VARCHAR(100),
-    FOREIGN KEY (product_size) REFERENCES product_items (product_size),
-    FOREIGN KEY (Product_ID) REFERENCES product_category (Product_ID),
-    FOREIGN KEY (product_Name) REFERENCES product_details (product_Name)
-)
+    variation_id INT PRIMARY KEY AUTO_INCREMENT,
+    product_id INT,
+    color_id INT,
+    product_size VARCHAR(20),
+    FOREIGN KEY (product_id) REFERENCES product_details (product_id),
+    FOREIGN KEY (color_id) REFERENCES color_options (color_id)
+);
     
-----Size Category -----
+----Size Category -----8
 USE ecommerce_library;
 CREATE TABLE size_category(
-    product_size VARCHAR(100) PRIMARY KEY NOT NULL,
-    FOREIGN KEY (product_color) REFERENCES product_variation (product_color),
-    FOREIGN KEY (Product_ID) REFERENCES product_category (Product_ID),
-    FOREIGN KEY (product_Name) REFERENCES product_details (product_Name)
-)
-----Size Option-----
+    size_id INT PRIMARY KEY AUTO_INCREMENT,
+    size_label VARCHAR(50)
+);
+----Size Option-----9
 USE ecommerce_library;
 CREATE TABLE size_option(
-    Size_ID VARCHAR(100) PRIMARY KEY NOT NULL,
-    FOREIGN KEY (product_size) REFERENCES size_category (product_size),
-    FOREIGN KEY (Product_ID) REFERENCES product_category (Product_ID),
-    FOREIGN KEY (product_Name) REFERENCES product_details (product_Name)
-)
------product-attribute----
+    option_id INT PRIMARY KEY AUTO_INCREMENT,
+    size_id INT,
+    product_id INT,
+    FOREIGN KEY (size_id) REFERENCES size_category (size_id),
+    FOREIGN KEY (product_id) REFERENCES product_details (product_id)
+);
+-----product-attribute----10
 USE ecommerce_library;
 CREATE TABLE product_attribute(
-    material_ID VARCHAR(100) PRIMARY KEY NOT NULL,
-    material_Name VARCHAR(100),
-    material_Weight VARCHAR(100),
-    FOREIGN KEY (Product_ID) REFERENCES product_category (Product_ID),
-    FOREIGN KEY (product_Name) REFERENCES product_details (product_Name)
-)
-----atribute category----
+    attribute_id INT PRIMARY KEY AUTO_INCREMENT,
+    product_id INT,
+    material_name VARCHAR(100),
+    material_weight VARCHAR(100),
+    FOREIGN KEY (product_id) REFERENCES product_details (product_id)
+);
+----atribute category----11
 USE ecommerce_library;
 CREATE TABLE attribute_category(
+    attribute_cat_id INT PRIMARY KEY AUTO_INCREMENT,
+    product_id INT,
     physical_attributes VARCHAR(100),
     technical_attributes VARCHAR(100),
-    FOREIGN KEY (Product_ID) REFERENCES product_category (Product_ID),
-    FOREIGN KEY (product_Name) REFERENCES product_details (product_Name)
-)
------attribute type------
+    FOREIGN KEY (product_id) REFERENCES product_details (product_id)
+);
+-----attribute type------12
 USE ecommerce_library;
 CREATE TABLE attribute_type(
-    Felxible 
-    FOREIGN KEY (Product_ID) REFERENCES product_category (Product_ID),
-    FOREIGN KEY (product_Name) REFERENCES product_details (product_Name)
-)
+    attribute_type_id INT PRIMARY KEY AUTO_INCREMENT,
+    product_id INT,
+    attribute_type VARCHAR(100),
+    FOREIGN KEY (product_id) REFERENCES product_details (product_id),
+);
 
 
